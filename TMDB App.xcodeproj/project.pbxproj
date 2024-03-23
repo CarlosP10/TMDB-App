@@ -15,6 +15,10 @@
 		7AE9D1F02BAD013300F93CC5 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE9D1EF2BAD013300F93CC5 /* HomeViewController.swift */; };
 		7AE9D1F22BAD016500F93CC5 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE9D1F12BAD016500F93CC5 /* FavoritesViewController.swift */; };
 		7AE9D1F52BAD073900F93CC5 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE9D1F42BAD073900F93CC5 /* L10n.swift */; };
+		7AE9D1F72BAE523400F93CC5 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE9D1F62BAE523400F93CC5 /* URL+Extensions.swift */; };
+		7AE9D1FA2BAE53F300F93CC5 /* TMDBEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE9D1F92BAE53F300F93CC5 /* TMDBEndpoint.swift */; };
+		7AE9D1FC2BAE557300F93CC5 /* APICacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE9D1FB2BAE557300F93CC5 /* APICacheManager.swift */; };
+		7AE9D1FE2BAE56E100F93CC5 /* TMDBService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE9D1FD2BAE56E100F93CC5 /* TMDBService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +32,10 @@
 		7AE9D1EF2BAD013300F93CC5 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		7AE9D1F12BAD016500F93CC5 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		7AE9D1F42BAD073900F93CC5 /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
+		7AE9D1F62BAE523400F93CC5 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
+		7AE9D1F92BAE53F300F93CC5 /* TMDBEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBEndpoint.swift; sourceTree = "<group>"; };
+		7AE9D1FB2BAE557300F93CC5 /* APICacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICacheManager.swift; sourceTree = "<group>"; };
+		7AE9D1FD2BAE56E100F93CC5 /* TMDBService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +98,7 @@
 		7AE9D1E52BACFB2300F93CC5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				7AE9D1F62BAE523400F93CC5 /* URL+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -113,6 +122,8 @@
 		7AE9D1E82BACFBD100F93CC5 /* APIClient */ = {
 			isa = PBXGroup;
 			children = (
+				7AE9D1F92BAE53F300F93CC5 /* TMDBEndpoint.swift */,
+				7AE9D1FD2BAE56E100F93CC5 /* TMDBService.swift */,
 			);
 			path = APIClient;
 			sourceTree = "<group>";
@@ -132,6 +143,7 @@
 		7AE9D1EA2BACFC4200F93CC5 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				7AE9D1FB2BAE557300F93CC5 /* APICacheManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -231,12 +243,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AE9D1FE2BAE56E100F93CC5 /* TMDBService.swift in Sources */,
 				7AE9D1D32BACF82B00F93CC5 /* TabBarController.swift in Sources */,
+				7AE9D1F72BAE523400F93CC5 /* URL+Extensions.swift in Sources */,
 				7AE9D1CF2BACF82B00F93CC5 /* AppDelegate.swift in Sources */,
 				7AE9D1F52BAD073900F93CC5 /* L10n.swift in Sources */,
 				7AE9D1D12BACF82B00F93CC5 /* SceneDelegate.swift in Sources */,
+				7AE9D1FA2BAE53F300F93CC5 /* TMDBEndpoint.swift in Sources */,
 				7AE9D1F22BAD016500F93CC5 /* FavoritesViewController.swift in Sources */,
 				7AE9D1F02BAD013300F93CC5 /* HomeViewController.swift in Sources */,
+				7AE9D1FC2BAE557300F93CC5 /* APICacheManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

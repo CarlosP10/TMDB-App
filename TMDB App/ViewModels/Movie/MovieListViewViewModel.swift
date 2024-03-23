@@ -39,6 +39,9 @@ final class MovieListViewViewModel: NSObject {
     }
     
     private var cellViewModels = [MovieCollectionViewCellViewModel]()
+    public var tmdbEndpoints = TMDBEndpoint.allCases
+    private var selectedEndpoint = TMDBEndpoint.nowPlaying
+    private var selectedSection = 0
     
     var canFetchNextPage: Bool {
         return !isLoadingMoreMovies && currentPage < totalPages
@@ -48,21 +51,33 @@ final class MovieListViewViewModel: NSObject {
         fetchMoreMovies(page: currentPage + 1)
     }
     
+    func didChangeSegment(to index: Int) {
+        selectedEndpoint = tmdbEndpoints[index]
+        selectedSection = index
+        currentPage = 1
+        movies = []
+        cellViewModels = []
+        fetchMovies()
+    }
+
+
+    
     /// Fetch initial set of movies
     func fetchMovies() {
         let queryItems = [
             URLQueryItem(name: "page", value: String(currentPage))
         ]
-        let resource = Resource<ResultModel<MovieModel>>(url: URL.getMovie(.popular),endpoint: .popular, method: .get(queryItems))
+        let resource = Resource<ResultModel<MovieModel>>(url: URL.getMovie(selectedEndpoint),endpoint: selectedEndpoint, method: .get(queryItems))
         
         TMDBService.shared.load(resource) { [weak self] result in
             switch result {
             case .success(let responseModel):
+                guard let self = self else { return }
                 let results = responseModel.results
-                self?.totalPages = responseModel.totalPages
-                self?.movies = results
+                self.totalPages = responseModel.totalPages
+                self.movies = results
                 DispatchQueue.main.async {
-                    self?.delegate?.didLoadInitialMovies()
+                    self.delegate?.didLoadInitialMovies()
                 }
                 
             case .failure(let error):
@@ -79,7 +94,7 @@ final class MovieListViewViewModel: NSObject {
         let queryItems = [
             URLQueryItem(name: "page", value: String(page))
         ]
-        let resource = Resource<ResultModel<MovieModel>>(url: URL.getMovie(.popular),endpoint: .popular, method: .get(queryItems))
+        let resource = Resource<ResultModel<MovieModel>>(url: URL.getMovie(selectedEndpoint),endpoint: selectedEndpoint, method: .get(queryItems))
         
         TMDBService.shared.load(resource) { [weak self] result in
             guard let self = self else { return }
@@ -92,6 +107,7 @@ final class MovieListViewViewModel: NSObject {
                 let newCount = results.count
                 let total = originalCount+newCount
                 let statingIndex = total - newCount
+                
                 let indexPathsToAdd: [IndexPath] = Array(statingIndex..<(statingIndex+newCount)).compactMap({
                     return IndexPath(row: $0, section: 0)
                 })
@@ -123,6 +139,7 @@ extension MovieListViewViewModel: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MovieCollectionViewCell.cellIdentifier,
             for: indexPath

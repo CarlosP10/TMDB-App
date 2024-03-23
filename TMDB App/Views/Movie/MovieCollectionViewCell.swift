@@ -32,7 +32,7 @@ struct MovieCollectionViewCell: View {
                     case .failure(_):
                         Image(systemName: "ant.circle.fill").iconModifier()
                     case .empty:
-                        Image(systemName: "photo.circle.fill").iconModifier()
+                        ProgressView()
                     @unknown default:
                         ProgressView()
                     }

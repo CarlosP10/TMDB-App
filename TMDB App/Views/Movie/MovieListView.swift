@@ -27,6 +27,19 @@ final class MovieListView: UIView {
         return spinner
     }()
     
+    private let haptic = UISelectionFeedbackGenerator()
+    
+    private let segmentedViews: UISegmentedControl = {
+        let segmented = UISegmentedControl()
+        segmented.backgroundColor = .clear
+        segmented.tintColor = .clear
+        segmented.alpha = 0
+        segmented.setTitleTextAttributes([.foregroundColor : UIColor.label ], for: .selected)
+        segmented.setTitleTextAttributes([.foregroundColor : UIColor.secondaryLabel], for: .normal)
+        segmented.translatesAutoresizingMaskIntoConstraints = false
+        return segmented
+    }()
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -47,12 +60,13 @@ final class MovieListView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
-        addSubviews(collectionView, spinner)
+        addSubviews(segmentedViews, collectionView, spinner)
         addConstraints()
         spinner.startAnimating()
         viewModel.delegate = self
         viewModel.fetchMovies()
         setUpCollectionView()
+        setUpSegmentedView()
     }
     
     required init?(coder: NSCoder) {
@@ -66,7 +80,12 @@ final class MovieListView: UIView {
             spinner.centerXAnchor.constraint(equalTo: centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
             
-            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            segmentedViews.topAnchor.constraint(equalTo: topAnchor, constant: 15),
+            segmentedViews.leadingAnchor.constraint(equalTo: leadingAnchor),
+            segmentedViews.trailingAnchor.constraint(equalTo: trailingAnchor),
+            segmentedViews.heightAnchor.constraint(equalToConstant: 50),
+            
+            collectionView.topAnchor.constraint(equalTo: segmentedViews.bottomAnchor),
             collectionView.leftAnchor.constraint(equalTo: leftAnchor),
             collectionView.rightAnchor.constraint(equalTo: rightAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -77,17 +96,38 @@ final class MovieListView: UIView {
         collectionView.dataSource = viewModel
         collectionView.delegate = viewModel
     }
+    
+    private func setUpSegmentedView() {
+        haptic.prepare()
+        segmentedViews.removeAllSegments()
+        
+        for (index, value) in TMDBEndpoint.allCases.enumerated() {
+            segmentedViews.insertSegment(withTitle: value.title, at: index, animated: true)
+        }
+        segmentedViews.selectedSegmentIndex = 0
+        segmentedViews.addTarget(self, action: #selector(viewChanged), for: .valueChanged)
+    }
+    
+    @objc
+    private func viewChanged(_ sender: UISegmentedControl) {
+        haptic.selectionChanged()
+        spinner.startAnimating()
+        collectionView.reloadData()
+        viewModel.didChangeSegment(to: sender.selectedSegmentIndex)
+    }
 }
 
 //MARK: - MovieListViewViewModelDelegate
 
 extension MovieListView: MovieListViewViewModelDelegate {
+    
     func didLoadInitialMovies() {
         spinner.stopAnimating()
         collectionView.isHidden = false
         collectionView.reloadData()//Initial fetch
         UIView.animate(withDuration: 0.4) {
             self.collectionView.alpha = 1
+            self.segmentedViews.alpha = 1
         }
     }
     

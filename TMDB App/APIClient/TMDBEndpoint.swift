@@ -17,4 +17,17 @@ import Foundation
     case topRated = "top_rated"
     /// Endpoint to get upcoming
     case upcoming
+    
+    var title: String {
+        switch self {
+        case .nowPlaying:
+            "Now Playing"
+        case .popular:
+            "Popular"
+        case .topRated:
+            "Top Rated"
+        case .upcoming:
+            "Upcoming"
+        }
+    }
 }

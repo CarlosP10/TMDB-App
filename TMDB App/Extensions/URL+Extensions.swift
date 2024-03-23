@@ -21,6 +21,10 @@ extension URL {
         URL(string: "/3/search/movie", relativeTo: Self.tmdbURL)!
     }
     
+    static func getMovie(_ endpoint: TMDBEndpoint) -> URL {
+        URL(string: "/3/movie/\(endpoint.rawValue)", relativeTo: Self.tmdbURL)!
+    }
+    
     static func getBackDropPath(_ image: String, _ width: Int = 500) -> URL {
         return URL(string: "/t/p/w\(width)/"+image, relativeTo: Self.images)!
     }

@@ -47,8 +47,21 @@ final class TMDBService {
     /// - Parameter resource:  contains the details of the request
     /// - Returns: decoded T object,, representing the data retrieved from the server.
     func load<T: Codable>(_ resource: Resource<T>, completion: @escaping (Result<T, Error>) -> Void) {
+        var fullURLString = resource.url.absoluteString
+
+        if case .get(let queryItems) = resource.method {
+            if !queryItems.isEmpty {
+                if !fullURLString.contains("?") {
+                    fullURLString += "?"
+                } else {
+                    fullURLString += "&"
+                }
+                let queryItemsString = queryItems.map { "\($0.name)=\($0.value ?? "")" }.joined(separator: "&")
+                fullURLString += queryItemsString
+            }
+        }
         
-        if let cachedData = cacheManager.cachedResponse(for: resource.endpoint, url: resource.url) {
+        if let cachedData = cacheManager.cachedResponse(for: resource.endpoint, url: URL(string: fullURLString)) {
             do {
                 let result = try JSONDecoder().decode(T.self, from: cachedData)
                 completion(.success(result))
@@ -94,7 +107,7 @@ final class TMDBService {
                 // Cache the response
                 self?.cacheManager.setCache(
                     for: resource.endpoint,
-                    url: resource.url, 
+                    url: URL(string: fullURLString), 
                     data: data
                 )
                 

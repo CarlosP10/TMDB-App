@@ -1,0 +1,106 @@
+//
+//  FavoritesListView.swift
+//  TMDB App
+//
+//  Created by Carlos Paredes on 25/3/24.
+//
+
+import UIKit
+
+protocol FavoritesListViewDelegate: AnyObject {
+    func movieListView(
+        _ movieList: FavoritesListView,
+        didSelectMovie movie: MovieDetailModel
+    )
+}
+
+final class FavoritesListView: UIView {
+    
+    public weak var delegate: FavoritesListViewDelegate?
+    
+    let viewModel = FavoritesListViewViewModel()
+    
+    let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.hidesWhenStopped = true
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
+    }()
+    
+    let haptic = UISelectionFeedbackGenerator()
+    
+    let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.isHidden = true
+        collectionView.alpha = 0.3
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(UICollectionViewCell.self,
+                                forCellWithReuseIdentifier: MovieCollectionViewCell.cellIdentifier)
+        collectionView.register(FooterLoadingCollectionReusableView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                withReuseIdentifier: FooterLoadingCollectionReusableView.identifier)
+        return collectionView
+    }()
+    
+    //MARK: - Init
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        translatesAutoresizingMaskIntoConstraints = false
+        addSubviews(collectionView, spinner)
+        addConstraints()
+        spinner.startAnimating()
+        
+        viewModel.delegate = self
+        setUpCollectionView()
+        viewModel.loadInitialMovies()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func addConstraints() {
+        NSLayoutConstraint.activate([
+            spinner.widthAnchor.constraint(equalToConstant: 100),
+            spinner.heightAnchor.constraint(equalToConstant: 100),
+            spinner.centerXAnchor.constraint(equalTo: centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            collectionView.topAnchor.constraint(equalTo: topAnchor, constant: 15),
+            collectionView.leftAnchor.constraint(equalTo: leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
+    }
+    
+    private func setUpCollectionView() {
+        collectionView.dataSource = viewModel
+        collectionView.delegate = viewModel
+    }
+}
+
+//MARK: - MovieListViewViewModelDelegate
+
+extension FavoritesListView: FavoritesListViewViewModelDelegate {
+    
+    func reloadData() {
+        collectionView.reloadData()
+    }
+    
+    func didLoadInitialMovies() {
+        spinner.stopAnimating()
+        collectionView.isHidden = false
+        collectionView.reloadData()//Initial fetch
+        UIView.animate(withDuration: 0.4) {
+            self.collectionView.alpha = 1
+        }
+    }
+    
+    func didSelectMovie(_ movie: MovieDetailModel) {
+        delegate?.movieListView(self, didSelectMovie: movie)
+    }
+    
+}

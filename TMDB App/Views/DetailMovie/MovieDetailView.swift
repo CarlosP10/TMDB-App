@@ -11,6 +11,7 @@ struct MovieDetailView: View {
     
     //MARK: - PROPERTIES
     @ObservedObject private var viewModel: MovieDetailViewModel
+    @StateObject private var saveViewModel = MovieSaveViewModel()
     
     var movie: MovieDetailModel?
     
@@ -22,6 +23,7 @@ struct MovieDetailView: View {
 
     @State private var pulsate: Bool = false
     @State private var imagesList = [String]()
+    @State private var isSaved: Bool = false
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -44,16 +46,30 @@ struct MovieDetailView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        //TITLE
-                        Text(movie.title ?? "")
-                            .font(.system(.title, design: .serif))
-                            .fontWeight(.bold)
-                            .multilineTextAlignment(.leading)
-                            .padding(.top, 10)
+                        HStack {
+                            //TITLE
+                            Text(movie.title ?? "")
+                                .font(.system(.title, design: .serif))
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.leading)
+                                .padding(.top, 10)
+                            Spacer()
+                            //Saved button
+                            Button(action: {
+                                saveViewModel.saveMovie(movie)
+                                isSaved = true
+                            }) {
+                                Image(systemName: isSaved ? "heart.fill" : "heart")
+                                    .foregroundColor(isSaved ? .red : .gray)
+                            }
+                            .padding()
+                        }
+                        
                         //GENRES
                         if let genres = movie.genres {
                             GenresView(genres: genres.map{ $0.name ?? "" })
                         }
+                            
                         //GENERALINFO
                         HStack {
                             if let runtime = movie.runtime {
@@ -126,6 +142,11 @@ struct MovieDetailView: View {
             viewModel.loadMovieTrailer()
             viewModel.loadMovieCrew()
             viewModel.loadMovieWatchProviders()
+            
+            if let movie = movie {
+                let savedMovies = saveViewModel.loadSavedMovies()
+                isSaved = savedMovies.contains(where: { $0.id == movie.id })
+            }
         }
     }
 }

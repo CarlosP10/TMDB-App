@@ -83,7 +83,7 @@ struct MovieCollectionViewCell: View {
                         let image = UIImage(data: data)
                         imagePoster = image
                     }
-                case .failure(let failure):
+                case .failure(_):
                     imagePoster = UIImage(systemName: "ant.circle.fill")
                 }
             }

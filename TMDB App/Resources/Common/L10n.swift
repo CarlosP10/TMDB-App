@@ -17,4 +17,8 @@ struct L10n {
         static let appearanceAdaptive = "ColorAppearanceAdaptive"
     }
     
+    struct Identifiers {
+        static let keyForMovie = "SavedMovies"
+    }
+    
 }

@@ -48,4 +48,23 @@ struct MovieDetailModel: Codable {
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
     }
+    
+    func toMovie() -> MovieModel {
+        return MovieModel(
+            adult: self.adult,
+            backdropPath: self.backdropPath,
+            posterPath: self.posterPath,
+            genreIDS: (self.genres != nil) ? self.genres?.map { $0.id } : [],
+            id: self.id,
+            originalLanguage: self.originalLanguage,
+            originalTitle: self.originalTitle,
+            overview: self.overview,
+            popularity: self.popularity,
+            releaseDate: self.releaseDate,
+            title: self.title,
+            video: self.video,
+            voteAverage: self.voteAverage,
+            voteCount: self.voteCount
+        )
+    }
 }

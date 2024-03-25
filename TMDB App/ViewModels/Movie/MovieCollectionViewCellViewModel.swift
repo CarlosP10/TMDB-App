@@ -6,17 +6,18 @@
 //
 
 import Foundation
+import SwiftUI
 
-final class MovieCollectionViewCellViewModel: Hashable, Equatable {
-    public let title: String
-    public let releaseDate: String
-    public let starts: Double
-    public let overview: String
+final class MovieCollectionViewCellViewModel: Hashable, Equatable, ObservableObject {
+    public let title: String?
+    public let releaseDate: String?
+    public let starts: Double?
+    public let overview: String?
     private let imageUrl: URL?
-
+    
     // MARK: - Init
 
-    init(title: String, releaseDate: String, starts: Double, overview: String, imageUrl: URL?) {
+    init(title: String?, releaseDate: String?, starts: Double?, overview: String?, imageUrl: URL?) {
         self.title = title
         self.releaseDate = releaseDate
         self.starts = starts
@@ -32,7 +33,7 @@ final class MovieCollectionViewCellViewModel: Hashable, Equatable {
         }
         ImageLoader.shared.downloadImage(url, completion: completion)
     }
-
+    
     // MARK: - Hashable
 
     static func == (lhs: MovieCollectionViewCellViewModel, rhs: MovieCollectionViewCellViewModel) -> Bool {

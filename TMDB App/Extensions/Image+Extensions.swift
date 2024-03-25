@@ -23,4 +23,13 @@ extension Image {
             .foregroundColor(.purple)
             .opacity(0.5)
     }
+    
+    func castModifier() -> some View {
+        self
+            .imageModifier()
+            .frame(maxHeight: 250)
+            .padding(0)
+            .clipShape(Circle())
+            .padding(.bottom, -10)
+    }
 }

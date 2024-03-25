@@ -12,6 +12,7 @@ protocol MovieListViewViewModelDelegate: AnyObject {
     func didLoadInitialMovies()
     func didLoadMoreMovies(with newIndexPaths: [IndexPath])
     func didSelectMovie(_ movie: MovieModel)
+    func didChangeSement()
 }
 
 /// View Model to handle movie list view logic
@@ -58,10 +59,9 @@ final class MovieListViewViewModel: NSObject {
         movies = []
         cellViewModels = []
         fetchMovies()
+        delegate?.didChangeSement()
     }
 
-
-    
     /// Fetch initial set of movies
     func fetchMovies() {
         let queryItems = [

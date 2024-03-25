@@ -30,6 +30,13 @@ struct Resource<T: Codable> {
     let endpoint: TMDBEndpoint?
     var headers: [String: String] = [:]
     var method: HttpMethod = .get([])
+    
+    init(url: URL, endpoint: TMDBEndpoint? = nil, headers: [String: String] = [:], method: HttpMethod = .get([])) {
+        self.url = url
+        self.endpoint = endpoint
+        self.headers = headers
+        self.method = method
+    }
 }
 
 final class TMDBService {
@@ -118,5 +125,18 @@ final class TMDBService {
             }
         }
         task.resume()
+    }
+    
+    /// fetch and store image cache
+    /// - Parameters:
+    ///   - imageUrl: image url
+    ///   - completion: to set if request succes or fails
+    public func fetchImage(_ imageUrl: URL?, completion: @escaping (Result<Data, Error>) -> Void) {
+        // TODO: Abstract to Image Manager
+        guard let url = imageUrl else {
+            completion(.failure(URLError(.badURL)))
+            return
+        }
+        ImageLoader.shared.downloadImage(url, completion: completion)
     }
 }

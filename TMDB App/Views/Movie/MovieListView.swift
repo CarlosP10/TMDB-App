@@ -80,12 +80,12 @@ final class MovieListView: UIView {
             spinner.centerXAnchor.constraint(equalTo: centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
             
-            segmentedViews.topAnchor.constraint(equalTo: topAnchor, constant: 15),
-            segmentedViews.leadingAnchor.constraint(equalTo: leadingAnchor),
-            segmentedViews.trailingAnchor.constraint(equalTo: trailingAnchor),
-            segmentedViews.heightAnchor.constraint(equalToConstant: 50),
+            segmentedViews.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+            segmentedViews.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
+            segmentedViews.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
+            segmentedViews.heightAnchor.constraint(equalToConstant: 40),
             
-            collectionView.topAnchor.constraint(equalTo: segmentedViews.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: segmentedViews.bottomAnchor, constant: 15),
             collectionView.leftAnchor.constraint(equalTo: leftAnchor),
             collectionView.rightAnchor.constraint(equalTo: rightAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -112,14 +112,21 @@ final class MovieListView: UIView {
     private func viewChanged(_ sender: UISegmentedControl) {
         haptic.selectionChanged()
         spinner.startAnimating()
+        collectionView.alpha = 0.1
         collectionView.reloadData()
         viewModel.didChangeSegment(to: sender.selectedSegmentIndex)
+        UIView.animate(withDuration: 0.4) {
+            self.collectionView.alpha = 1
+        }
     }
 }
 
 //MARK: - MovieListViewViewModelDelegate
 
 extension MovieListView: MovieListViewViewModelDelegate {
+    func didChangeSement() {
+        collectionView.scrollToTop()
+    }
     
     func didLoadInitialMovies() {
         spinner.stopAnimating()
@@ -138,7 +145,7 @@ extension MovieListView: MovieListViewViewModelDelegate {
     }
     
     func didSelectMovie(_ movie: MovieModel) {
-        print(String(describing: movie))
+        delegate?.movieListView(self, didSelectMovie: movie)
     }
     
     

@@ -12,7 +12,7 @@ struct MovieCollectionViewCell: View {
     static let cellIdentifier = "RMCharacterCollectionViewCell"
     var showMoreData: Bool
     var movie: MovieModel
-    @ObservedObject private var viewModel: MovieCollectionViewCellViewModel
+    @ObservedObject private(set) var viewModel: MovieCollectionViewCellViewModel
     @State private var imagePoster: UIImage?
     
     // MARK: - INIT

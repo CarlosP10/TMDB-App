@@ -24,7 +24,7 @@ final class MovieListViewViewModel: NSObject {
     private(set) var currentPage = 1
     private(set) var totalPages = 1
     
-    private var movies: [MovieModel] = [] {
+    private(set) var movies: [MovieModel] = [] {
         didSet {
             for movie in movies {
                 let viewModel = MovieCollectionViewCellViewModel(
@@ -39,10 +39,10 @@ final class MovieListViewViewModel: NSObject {
         }
     }
     
-    private var cellViewModels = [MovieCollectionViewCellViewModel]()
+    private(set) var cellViewModels = [MovieCollectionViewCellViewModel]()
     public var tmdbEndpoints = TMDBEndpoint.allCases
     private var selectedEndpoint = TMDBEndpoint.nowPlaying
-    private var selectedSection = 0
+    private(set) var selectedSection = 0
     
     var canFetchNextPage: Bool {
         return !isLoadingMoreMovies && currentPage < totalPages

@@ -18,18 +18,18 @@ final class MovieListView: UIView {
     
     public weak var delegate: MovieListViewDelegate?
     
-    private let viewModel = MovieListViewViewModel()
+    let viewModel = MovieListViewViewModel()
     
-    private let spinner: UIActivityIndicatorView = {
+    let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
         spinner.hidesWhenStopped = true
         spinner.translatesAutoresizingMaskIntoConstraints = false
         return spinner
     }()
     
-    private let haptic = UISelectionFeedbackGenerator()
+    let haptic = UISelectionFeedbackGenerator()
     
-    private let segmentedViews: UISegmentedControl = {
+    let segmentedViews: UISegmentedControl = {
         let segmented = UISegmentedControl()
         segmented.backgroundColor = .clear
         segmented.tintColor = .clear
@@ -40,7 +40,7 @@ final class MovieListView: UIView {
         return segmented
     }()
     
-    private let collectionView: UICollectionView = {
+    let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
@@ -109,7 +109,7 @@ final class MovieListView: UIView {
     }
     
     @objc
-    private func viewChanged(_ sender: UISegmentedControl) {
+    func viewChanged(_ sender: UISegmentedControl) {
         haptic.selectionChanged()
         spinner.startAnimating()
         collectionView.alpha = 0.1

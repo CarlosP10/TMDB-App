@@ -22,4 +22,4 @@ para la generación de código la prueba se anulará.
 
 ## Previsualización
 ![Previsualización](/frame.png)
-![Previsualización2](/frame2.png)
+![Previsualización2](/frame1.png)
